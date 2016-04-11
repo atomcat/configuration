@@ -1,0 +1,21 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"AdvancedNewFile",
+		"C++ Snippets",
+		"C++NamespaceTool",
+		"CMake",
+		"CMakeSnippets",
+		"CTags",
+		"Git",
+		"Origami",
+		"Package Control",
+		"SideBarEnhancements",
+		"SublimeAStyleFormatter",
+		"SublimeLinter"
+	]
+}

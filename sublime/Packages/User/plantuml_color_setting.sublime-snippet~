@@ -1,0 +1,20 @@
+<snippet>
+	<content><![CDATA[
+
+skinparam activity {
+	ArrowColor Black
+	BorderColor Black
+	BackgroundColor #DCDCDC
+	FontName Impact
+}$0
+
+]]>
+</content>
+<tabTrigger>plantumlcf</tabTrigger>
+<description>plant uml color settings</description>
+<scope>source.uml</scope>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

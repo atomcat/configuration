@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# based on tar_nomovok_git
+
+print_help()
+{
+echo "Usage: `basename $0` <source_dir>"
+exit
+}
+
+if [ $# -eq 0 ];then
+	print_help
+	exit
+fi
+
+if [ ! -d $1 ];then
+	echo "$1 seems not a directory"
+	print_help
+        exit 
+fi
+
+EXCLUDES="--exclude-vcs"
+#HOME=""
+TMPDIR=`basename $1`
+PACKAGENAME=$TMPDIR
+PACKAGEVERSION=""
+
+
+if [ -z "$MYSPEC" ]; then
+# FINDING THE RIGHT SPEC IS HACKISH AND SUCKS
+	if [ -e "${TMPDIR}/rpm/" ]; then
+		SPECFILE=`find ${TMPDIR}/rpm/ -iname "*-qt5.spec"`
+		if [ -z "$SPECFILE" ]; then
+			SPECFILE=`ls ${TMPDIR}/rpm/*.spec`
+		fi
+	fi
+
+	if [ -e "${TMPDIR}/skytree/" ]; then
+		SPECFILE=`ls ${TMPDIR}/skytree/*.spec`
+	fi
+
+	if [ -z "$SPECFILE" ]; then
+		SPECFILE=`ls ${TMPDIR}/*.spec`
+	fi
+else
+	SPECFILE=`find ${TMPDIR}/ -iname $MYSPEC`
+fi
+
+if test -z $SPECFILE;then
+    echo "ERROR: no spec file found";
+    exit
+fi
+
+echo "found spec: $SPECFILE";
+echo "deploy spec to: "
+cp -a $SPECFILE ~/rpmbuild/SPECS #|| echo "failed to deploy spec file" && exit 1
+ls ~/rpmbuild/SPECS/`basename $SPECFILE`
+# Let's get the stuff from packaging folders
+#if [ -e "${TMPDIR}/rpm/" ]; then
+#	rsync ${TMPDIR}/rpm/* . --exclude=*.spec
+#fi
+
+#if [ -e "${TMPDIR}/skytree/" ]; then
+#	rsync ${TMPDIR}/skytree/* . --exclude=*.spec
+#fi
+
+if [ -e "$SPECFILE" ]; then
+	PACKAGENAME="$(grep -m 1 "Name\:" $SPECFILE |sed 's/.*Name\:[:blank:]*//')"
+	PACKAGENAME=${PACKAGENAME//[[:space:]]} # strip whitespaces
+
+	PACKAGEVERSION="$(grep -m 1 "Version\:" $SPECFILE |sed 's/.*Version\:[:blank:]*//')"
+	PACKAGEVERSION=${PACKAGEVERSION//[[:space:]]} # strip whitespaces
+
+	TARBALL="$(grep "Source0\:" $SPECFILE |sed -e 's/.*Source0\:[:blank:]*//')"
+	if [ -z "$TARBALL" ]; then
+		TARBALL="$(grep "Source\:" $SPECFILE |sed -e 's/.*Source\:[:blank:]*//')"
+	fi
+	TARBALL="$(echo $TARBALL| sed -e "s/%{name}/$PACKAGENAME/" -e "s/%{version}/$PACKAGEVERSION/")"
+	TARBALL="$(echo $TARBALL| sed -e 's/http:.*\///')"
+	TARBALL=${TARBALL//[[:space:]]}
+
+	cp $SPECFILE .
+else
+	echo "Couldn't find .spec file."
+	exit 1
+fi
+
+#echo "target file: $TARBALL"
+TARGETDIR=$PACKAGENAME-$PACKAGEVERSION
+#echo "target file dir : $TARGETDIR"
+
+MYTMP="tmp"
+if test ! -e $MYTMP;then
+	echo "$MYTMP not exists, creating it"
+	mkdir -p $MYTMP
+fi
+
+#enter tmp dir
+cd $MYTMP
+
+if [ -e $TARGETDIR ];then
+	echo "found old source dir: $TARGETDIR , deleting it"
+	rm -rf $TARGETDIR
+fi
+
+#prepare source
+echo "prepare new source ..."
+cp -a ../$TMPDIR  $TARGETDIR
+if test $? -ne 0;then
+	echo "copy files failed"
+	exit
+fi
+
+#tar jcvf $TARBALL $TARGETDIR
+#if test $? -eq 0;then
+#echo "tar success"
+#cp -a $TARBALL ~/rpmbuild/SOURCES
+#ls -l ~/rpmbuild/SOURCES/$TARBALL
+
+#RPMLINTRC=`ls ${TMPDIR}/*rpmlintrc`
+#if [ -e "$RPMLINTRC" ]; then
+#  cp $RPMLINTRC .
+#fi
+
+if [ "x$TARBALL" != "x" ]; then
+	#mv $TMPDIR "$PACKAGENAME-$PACKAGEVERSION"
+	#TMPDIR="$PACKAGENAME-$PACKAGEVERSION"
+
+	TAR_FMT=""
+	if [[ $TARBALL =~ gz$ ]]; then
+		TAR_FMT=z
+	fi
+	if [[ $TARBALL =~ bz2$ ]]; then
+		TAR_FMT=j
+	fi
+	if [[ $TARBALL =~ xz$ ]]; then
+		TAR_FMT=J
+	fi
+
+	if [ -z "$TAR_FMT" ]; then
+		echo "Not a supported tar format. Not packing!"
+	else
+		echo "prepare source tarball ..."
+
+		#tar -$TAR_FMT -c -f $TARBALL $EXCLUDES $TMPDIR || exit 1
+		tar -$TAR_FMT -c -f $TARBALL $EXCLUDES $TARGETDIR 
+		if test $? -eq 0;then
+			echo "prepare source done"
+			cp -a $TARBALL ~/rpmbuild/SOURCES
+			if test $? -eq 0;then
+				echo "copy source tarball to rpmbuild dir."
+				ls -l ~/rpmbuild/SOURCES/$TARBALL
+				myres="0";
+			else 
+				myres="1";
+		        	echo "failed to deploy source"	
+			fi
+		else 
+			echo "failed to create tarball"
+		fi
+	fi
+fi
+
+cd -
+pwd
+rm -rf $MYTMP
+rm  *.spec
+
+if [ $myres = "0" ];then
+	echo "finished"
+else
+	echo "failed"
+fi
+
+exit 0

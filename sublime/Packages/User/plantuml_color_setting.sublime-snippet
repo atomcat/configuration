@@ -1,0 +1,21 @@
+<snippet>
+	<content><![CDATA[
+@startuml
+
+skinparam activity {
+	ArrowColor Black
+	BorderColor Black
+	BackgroundColor #DCDCDC
+	FontName Impact
+}
+
+start
+$0
+stop
+@enduml
+]]>
+</content>
+<tabTrigger>flowchart</tabTrigger>
+<description>plant uml color settings</description>
+<scope>text.plain</scope>
+</snippet>

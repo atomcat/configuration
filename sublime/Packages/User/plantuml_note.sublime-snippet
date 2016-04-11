@@ -1,0 +1,12 @@
+<snippet>
+<content>
+<![CDATA[
+note right
+$0
+end note
+]]>
+</content>
+<tabTrigger>note</tabTrigger>
+<description>add note</description>
+<scope>text.plain</scope>
+</snippet>

@@ -1,0 +1,3 @@
+{
+	"cmd": ["java", "-jar", "/home/sheldon/workspace/tools/system-installation/plantuml.jar", "-charset", "utf-8", "-tpng", "$file"],
+}
