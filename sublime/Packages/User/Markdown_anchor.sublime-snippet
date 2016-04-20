@@ -1,0 +1,9 @@
+<snippet>
+ <content><![CDATA[
+[${1:Display_Text}][${2:id}]$5
+[$2]:${3:http://example.com/} ${4:"$3"}
+]]></content>
+ <tabTrigger>mdacr</tabTrigger>
+ <scope>text.html.markdown.multimarkdown, text.html.markdown</scope>
+ <description>Link Anchor</description>
+</snippet>

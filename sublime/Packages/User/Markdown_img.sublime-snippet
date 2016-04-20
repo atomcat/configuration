@@ -1,0 +1,8 @@
+<snippet>
+ <content><![CDATA[
+![${1:Some_Text}](${2:url_to_image} ${3:"$1"})
+]]></content>
+ <tabTrigger>mdimg</tabTrigger>
+ <scope>text.html.markdown.multimarkdown, text.html.markdown</scope>
+ <description>Insert Image</description>
+</snippet>
