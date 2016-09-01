@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/franz/work/syberos/cactus/tmp/bootfs/bootfs'
+let g:netrw_dirhist_2='/home/franz/work/syberos/cactus/tmp/bootfs/src/include'
+let g:netrw_dirhist_3='/home/caozhaojun/code/soss/.repo'
+let g:netrw_dirhist_4='/home/caozhaojun/code/sensorfw/sensorfw/adaptors/hybrisaccelerometer'
+let g:netrw_dirhist_5='/home/caozhaojun/code/YZM730X_SDK.w1621.prj.yzm7501p1/android-4.4.4_r2/hardware/leadcore/audio/lc1160'
+let g:netrw_dirhist_6='/parentroot/srv/syberos/targets/syberos-target-armv7tnhl/usr/include/android-headers/hardware'
+let g:netrw_dirhist_7='/home/caozhaojun/code/baihehua/android-4.4.4_r2/hardware/leadcore/libsensor/sensors_hal'
