@@ -134,6 +134,19 @@ alias sb2-zypper-qt55="sb2 -t syberos-target-armv7tnhl -R zypper "
 alias sb2-rpm-qt55="sb2 -t syberos-target-armv7tnhl -R rpm "
 alias sb2-qmake-qt55="sb2 -t syberos-target-armv7tnhl /usr/lib/qt55/bin/qmake"
 
+#sb2 lily
+alias sb2-lily="sb2 -t target-armv7tnhl-product_lily"
+alias sb2-ba-lily="sb2 -t target-armv7tnhl-product_lily rpmbuild -ba"
+alias sb2-inplace-lily="sb2 -t syberos-target-product_lily rpmbuild --build-in-place -ba"
+alias sb2-zypper-lily="sb2 -t target-armv7tnhl-product_lily -R zypper"
+alias sb2-rpm-lily="sb2 -t target-armv7tnhl-product_lily -R rpm"
+
+#sb2 millet
+alias sb2-millet="sb2 -t target-armv7tnhl-ginkgo_millet"
+alias sb2-ba-millet="sb2 -t target-armv7tnhl-ginkgo_millet rpmbuild -ba"
+alias sb2-zypper-millet="sb2 -t target-armv7tnhl-ginkgo_millet -R zypper"
+alias sb2-rpm-millet="sb2 -t target-armv7tnhl-ginkgo_millet -R rpm"
+
 #alias sdk=/srv/syberos/sdks/sdk/syberos-sdk-chroot
 alias sb264="sb2 -t syberos-target-aarch64 "
 alias sb2-ba64="sb2 -t syberos-target-aarch64 rpmbuild -ba "
@@ -168,6 +181,30 @@ function git_push {
 }
 alias gpb=git_push
 
+function git_clone_code() {
+    git clone ssh://pingwei_wu_dev@192.168.11.79:29418/platform/system/lib/$1.git
+}
+alias gitcode=git_clone_code
+
+function git_code_new_branch {
+    if [ X$1 == X ]; then
+        git checkout -b dev remotes/origin/master
+    else
+        git checkout -b $1 remotes/origin/$1
+    fi
+}
+alias gcoden=git_code_new_branch
+
+function git_push_code {
+    if [ X$1 == X ]; then
+        git push origin dev:refs/for/master
+    else
+        git push origin $1:refs/for/$1
+    fi
+}
+
+alias gpbcode=git_push_code
+
 alias gbs-arm="gbs build -A armv7tnhl"
 
 function scp2phone {
@@ -175,6 +212,9 @@ function scp2phone {
 }
 
 alias pushfile=scp2phone
+
+alias gitpushinternal='git push cactus castle_internal:refs/for/castle_internal'
+alias gitpushexternal='git push cactus castle_external:refs/for/castle_external'
 
 
 function scp2vm {
@@ -185,3 +225,29 @@ alias pushvm=scp2vm
 alias loginvm='ssh -p 5555 developer@localhost'
 export PATH="/home/sheldon/Qt5.5.0/5.5/gcc_64/bin":$PATH
 alias subl='LD_PRELOAD=/home/sheldon/workspace/tools/system-installation/libsublime-imfix.so subl'
+alias adbconnect='adb connect 192.168.100.100'
+alias adbi='adb -s 192.168.100.100:5555 shell' 
+alias adbilogcat='adb -s 192.168.100.100:5555 logcat |grep Alarm' 
+alias adbir='adb -s 192.168.100.100:5555 remount' 
+alias adbe='adb -s 0123456789ABCDEF shell' 
+alias adber='adb -s 0123456789ABCDEF remount' 
+alias adbi-pushservice='adb -s 192.168.100.100:5555 push out/target/product/aus6735_66c_c_m/system/framework/services.jar /system/framework/'
+alias adbi-pushsso64='adb -s 192.168.100.100:5555 push out/target/product/aus6735_66c_c_m/system/lib64/libandroid_servers.so /system/lib64'
+alias adbi-pushsso='adb -s 192.168.100.100:5555 push out/target/product/aus6735_66c_c_m/system/lib/libandroid_servers.so /system/lib'
+alias adbe-pushservice='adb -s 0123456789ABCDEF push out/target/product/aus6735_66c_c_m/system/framework/services.jar /system/framework/'
+alias adbe-pushsso64='adb -s 0123456789ABCDEF push out/target/product/aus6735_66c_c_m/system/lib64/libandroid_servers.so /system/lib64'
+alias adbe-pushsso='adb -s 0123456789ABCDEF push out/target/product/aus6735_66c_c_m/system/lib/libandroid_servers.so /system/lib'
+alias androidinit='source build/envsetup.sh &&  lunch full_aus6735_66c_c_m-userdebug'
+#alias androidinit='source build/envsetup.sh && ./buildmodem_L08A.sh && lunch full_aus6735_66c_c_m-userdebug'
+
+#export NDK=/home/sheldon/android-toolchain/arm64
+#export PATH=$PATH:$NDK/bin
+#export SYSROOT=$NDK/sysroot
+#CPPFLAGS="-I${SYSROOT}/usr/include"
+#LDFLAGS="-L/${SYSROOT}/usr/lib"
+#export CPPFLAGS LDFLAGS
+
+export JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45
+export PATH=$JAVA_HOME/bin:$PATH 
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar 
+alias pdk=/home/sheldon/Syberos-Pdk/sdk/sdk-root/syberos-sdk-chroot
