@@ -1,0 +1,20 @@
+[user]
+	name = wupingwei
+    email = wupingwei@cmos.com
+    #email = wupingwei@syberos.com
+    #email = jacobi.q@gmail.com
+[review "cactus.insyber.com"]
+	username=pingwei_wu_dev
+[color]
+	ui = true
+[alias]
+	ci = commit
+	st = status
+	co = checkout
+	br = branch
+[core]
+	editor = vim
+[commit]
+	template = /home/sheldon/.git_template
+[http]
+	cookiefile = /home/sheldon/.gitcookies
